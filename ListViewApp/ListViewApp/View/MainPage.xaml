@@ -1,0 +1,43 @@
+﻿<Page
+    x:Class="ListViewApp.View.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:model="using:ListViewApp.Model"
+    DataContext="{StaticResource NotebookViewModel}">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <ListView Grid.Column="0"
+                  ItemsSource="{Binding Notes}"
+                  SelectedItem="{Binding SelectedNote, Mode=TwoWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:Note">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}"
+                                   Text="{x:Bind Title}"
+                                   TextTrimming="WordEllipsis"
+                                   TextWrapping="NoWrap" />
+                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}"
+                                   Text="{x:Bind Content}"
+                                   TextTrimming="WordEllipsis"
+                                   TextWrapping="NoWrap" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackPanel Grid.Column="1"
+                    Orientation="Vertical">
+            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}"
+                       Text="{Binding SelectedNote.Title}" />
+            <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
+                       Text="{Binding SelectedNote.Content}"
+                       TextWrapping="WrapWholeWords" />
+        </StackPanel>
+    </Grid>
+</Page>
