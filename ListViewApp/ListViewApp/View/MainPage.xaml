@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:model="using:ListViewApp.Model"
     DataContext="{StaticResource NotebookViewModel}">
 
@@ -13,30 +14,49 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
+        <!-- Notebook ListView -->
         <ListView Grid.Column="0"
-                  ItemsSource="{Binding Notes}"
-                  SelectedItem="{Binding SelectedNote, Mode=TwoWay}">
+                  ItemsSource="{Binding Notebooks}"
+                  SelectedItem="{Binding SelectedNotebook, Mode=TwoWay}">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="model:Note">
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}"
-                                   Text="{x:Bind Title}"
-                                   TextTrimming="WordEllipsis"
-                                   TextWrapping="NoWrap" />
-                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}"
-                                   Text="{x:Bind Content}"
-                                   TextTrimming="WordEllipsis"
-                                   TextWrapping="NoWrap" />
-                    </StackPanel>
+                <DataTemplate x:DataType="model:Notebook">
+                    <!-- Expander -->
+                    <controls:Expander Header="{x:Bind Title}"
+                                       IsExpanded="True">
+                        <!-- Note ListView -->
+                        <ListView IsItemClickEnabled="True"
+                                  ItemClick="NoteListView_OnItemClick"
+                                  ItemsSource="{Binding Notes}"
+                                  Name="NoteListView"
+                                  SelectedItem="{Binding SelectedNote, Mode=TwoWay}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="model:Note">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Style="{ThemeResource HeaderTextBlockStyle}"
+                                                   Text="{x:Bind Title}"
+                                                   TextTrimming="WordEllipsis"
+                                                   TextWrapping="NoWrap" />
+                                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}"
+                                                   Text="{x:Bind Content}"
+                                                   TextTrimming="WordEllipsis"
+                                                   TextWrapping="NoWrap" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </controls:Expander>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <!-- Note view -->
         <StackPanel Grid.Column="1"
                     Orientation="Vertical">
             <TextBlock Style="{ThemeResource HeaderTextBlockStyle}"
-                       Text="{Binding SelectedNote.Title}" />
+                       Text="{Binding SelectedNotebook.SelectedNote.Title}" />
+            <TextBlock Style="{ThemeResource CaptionTextBlockStyle}"
+                       Text="{Binding SelectedNotebook}" />
             <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
-                       Text="{Binding SelectedNote.Content}"
+                       Text="{Binding SelectedNotebook.SelectedNote.Content}"
                        TextWrapping="WrapWholeWords" />
         </StackPanel>
     </Grid>

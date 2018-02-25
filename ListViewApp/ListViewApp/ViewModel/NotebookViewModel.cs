@@ -9,26 +9,29 @@ namespace ListViewApp.ViewModel
 {
     public partial class NotebookViewModel
     {
-        private Note _selectedNote;
+        private Notebook _selectedNotebook;
 
         public NotebookViewModel()
         {
-            Notes.Add(Note.ChinaNoteEn);
-            Notes.Add(Note.ChinaNoteZh);
-            Notes.Add(Note.FranceNoteEn);
-            Notes.Add(Note.FranceNoteZh);
-            Notes.Add(Note.MyScriptNoteDefault);
+            Notebook.Default.Notes.Add(Note.MyScriptNoteDefault);
+            Notebooks.Add(Notebook.Default);
+            Notebook.MyNotebookEn.Notes.Add(Note.ChinaNoteEn);
+            Notebook.MyNotebookEn.Notes.Add(Note.FranceNoteEn);
+            Notebooks.Add(Notebook.MyNotebookEn);
+            Notebook.MyNotebookZh.Notes.Add(Note.ChinaNoteZh);
+            Notebook.MyNotebookZh.Notes.Add(Note.FranceNoteZh);
+            Notebooks.Add(Notebook.MyNotebookZh);
         }
 
-        public ObservableCollection<Note> Notes { get; } = new ObservableCollection<Note>();
+        public ObservableCollection<Notebook> Notebooks { get; } = new ObservableCollection<Notebook>();
 
-        public Note SelectedNote
+        public Notebook SelectedNotebook
         {
-            get => _selectedNote ?? (_selectedNote = Notes.Count == 0 ? null : Notes.First());
+            get => _selectedNotebook ?? (_selectedNotebook = Notebooks.Count == 0 ? null : Notebooks.First());
             set
             {
-                _selectedNote = value;
-                OnPropertyChanged(nameof(SelectedNote));
+                _selectedNotebook = value;
+                OnPropertyChanged(nameof(SelectedNotebook));
             }
         }
     }
