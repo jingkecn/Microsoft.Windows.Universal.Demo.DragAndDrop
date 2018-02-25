@@ -23,16 +23,25 @@
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="model:Notebook">
                     <!-- Expander -->
-                    <controls:Expander Header="{x:Bind Title}"
-                                       IsExpanded="True">
+                    <controls:Expander AllowDrop="True"
+                                       DragEnter="NotebookExpander_OnDragEnter"
+                                       DragOver="NotebookExpander_OnDragOver"
+                                       Drop="NotebookExpander_OnDrop"
+                                       Header="{x:Bind Title}"
+                                       IsExpanded="True"
+                                       Name="NotebookExpander">
                         <!-- Note ListView -->
                         <ListView AllowDrop="True"
-                                  CanReorderItems="True"
+                                  CanDrag="True"
+                                  CanDragItems="True"
+                                  CanReorderItems="False"
+                                  DragItemsStarting="NoteListView_OnDragItemsStarting"
+                                  DragItemsCompleted="NoteListView_OnDragItemsCompleted"
                                   IsItemClickEnabled="True"
                                   ItemClick="NoteListView_OnItemClick"
                                   ItemsSource="{Binding Notes}"
-                                  Name="NoteListView"
-                                  SelectedItem="{Binding SelectedNote, Mode=TwoWay}">
+                                  SelectedItem="{Binding SelectedNote, Mode=TwoWay}"
+                                  SelectionMode="Extended">
                             <ListView.ItemTemplate>
                                 <DataTemplate x:DataType="model:Note">
                                     <StackPanel Orientation="Vertical">
