@@ -16,6 +16,8 @@
         </Grid.ColumnDefinitions>
         <!-- Notebook ListView -->
         <ListView Grid.Column="0"
+                  AllowDrop="True"
+                  CanReorderItems="True"
                   ItemsSource="{Binding Notebooks}"
                   SelectedItem="{Binding SelectedNotebook, Mode=TwoWay}">
             <ListView.ItemTemplate>
@@ -24,7 +26,9 @@
                     <controls:Expander Header="{x:Bind Title}"
                                        IsExpanded="True">
                         <!-- Note ListView -->
-                        <ListView IsItemClickEnabled="True"
+                        <ListView AllowDrop="True"
+                                  CanReorderItems="True"
+                                  IsItemClickEnabled="True"
                                   ItemClick="NoteListView_OnItemClick"
                                   ItemsSource="{Binding Notes}"
                                   Name="NoteListView"
