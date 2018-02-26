@@ -27,6 +27,8 @@ namespace ListViewApp.View
 
         private NotebookViewModel ViewModel => _viewModel ?? (_viewModel = DataContext as NotebookViewModel);
 
+        private bool IsDragEntered { get; set; }
+
         /// <summary>
         ///     When a note is dragged entering the notebook.
         /// </summary>
@@ -42,6 +44,7 @@ namespace ListViewApp.View
                 return;
             if (notebook == sourceNotebook)
                 return;
+            IsDragEntered = true;
             e.AcceptedOperation = DataPackageOperation.Move;
         }
 
@@ -61,6 +64,24 @@ namespace ListViewApp.View
             if (notebook == sourceNotebook)
                 return;
             e.AcceptedOperation = DataPackageOperation.Move;
+        }
+
+        /// <summary>
+        ///     When on a note drag leave, disable the drage mode.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NotebookExpander_OnDragLeave(object sender, DragEventArgs e)
+        {
+            Debug.WriteLine($"\n{sender}.{sender.GetHashCode()}.OnDragLeave");
+            if (!((sender as Expander)?.DataContext is Notebook notebook))
+                return;
+            Debug.WriteLine($"\ttarget = {notebook}");
+            if (!(e.Data.Properties["SourceNotebook"] is Notebook sourceNotebook))
+                return;
+            if (notebook == sourceNotebook)
+                return;
+            IsDragEntered = false;
         }
 
         /// <summary>
@@ -106,6 +127,7 @@ namespace ListViewApp.View
             Debug.WriteLine($"\tsource = {notebook}");
             e.Data.Properties.Add("SourceNotebook", notebook);
             e.Data.Properties.Add("Notes", e.Items);
+            IsDragEntered = false;
         }
 
         /// <summary>
@@ -121,6 +143,8 @@ namespace ListViewApp.View
             if (!((sender as ListView)?.DataContext is Notebook notebook))
                 return;
             Debug.WriteLine($"\tsource = {notebook}");
+            if (!IsDragEntered)
+                return;
             args.Items?.Cast<Note>().ToList().ForEach(note => notebook.Notes.Remove(note));
         }
     }
